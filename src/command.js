@@ -1,7 +1,7 @@
 const {program, InvalidArgumentError} = require('commander');
+import {createTask} from './actionCommand.js'
 
-module.exports.extractCommande = (argv)=>{
-    const args = argv.slice(1);
+export function extractCommande (argv){
 
     program
     .command("add")
@@ -9,6 +9,7 @@ module.exports.extractCommande = (argv)=>{
     .description("add the content of your task <string>")
     .action((task)=>{
         console.log(task)
+        createTask()
     })
 
     program.parse();
