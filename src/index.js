@@ -1,17 +1,15 @@
-const {Command, InvalidArgumentError} = require('commander');
-
-
-const program = new Command()
-program.name("task").description("todoList")
-
+import { program } from 'commander';
+import { createTask } from './command.js';
 
 program
 .command("add")
 .argument("<task>", "stain you want to add", taskNotEmpty)
 .description("add the content of your task <string>")
 .action((task)=>{
-    console.log(task)
+    createTask()
 })
+
+program.parse();
 
 
 function taskNotEmpty(task){
@@ -19,9 +17,4 @@ function taskNotEmpty(task){
         throw new InvalidArgumentError("Task must not empty.");
     }
     return task
-<<<<<<< HEAD
 }
-=======
-}
-
->>>>>>> 038853975ae87f769bb767e899694528db18dd78
