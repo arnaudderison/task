@@ -19,4 +19,9 @@ function taskNotEmpty(task){
         throw new InvalidArgumentError("Task must not empty.");
     }
     return task
+<<<<<<< HEAD
 }
+=======
+}
+
+>>>>>>> 038853975ae87f769bb767e899694528db18dd78
