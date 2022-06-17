@@ -4,6 +4,7 @@ const {Command, InvalidArgumentError} = require('commander');
 const program = new Command()
 program.name("task").description("todoList")
 
+
 program
 .command("add")
 .argument("<task>", "stain you want to add", taskNotEmpty)
