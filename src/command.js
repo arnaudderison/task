@@ -1,31 +1,16 @@
-import os from 'os'
-import fs from 'fs/promises'
-import path from 'path'
+import os from "os";
+import path from "path";
+import { readTask, saveTask } from "./utils.js";
+import { Task } from "./task.js";
 
-const DEFAULT_FILE = path.join(os.homedir(), 'task.json') 
+const DEFAULT_FILE = path.join(os.homedir(), "task.json");
 
-export async function createTask(){
-    const isFileExist = await fileExiste(DEFAULT_FILE)
-    if(!isFileExist){
-        await saveTask(DEFAULT_FILE)
-    }
-}
+export async function createTask(task) {
+  const tasks = await readTask(DEFAULT_FILE);
 
-async function saveTask(file){
-    try{
-         await fs.writeFile(file, JSON.stringify({message: "super cool"}))
-         return 
-    }catch(err){
-        console.log("Fatal Error")
-    }
-    
-}
+//   tasks.push(Task);
+    tasks.push({"task": task});
 
-async function fileExiste(file){
-    try{
-        await fs.access(file)
-        return true
-    }catch(err){
-        return false
-    }
+  console.log(tasks)
+  await saveTask(DEFAULT_FILE, tasks);
 }

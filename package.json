@@ -2,10 +2,16 @@
   "name": "task",
   "version": "1.0.0",
   "description": "",
+  "bin": {
+    "task": "./src/index.js"
+  },
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "js",
+    "prepare": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/ "
   },
   "repository": {
     "type": "git",
