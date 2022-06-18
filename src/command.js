@@ -6,34 +6,46 @@ const DEFAULT_FILE = path.join(os.homedir(), "task.json");
 
 export async function createTask(task) {
   const tasks = await readTask(DEFAULT_FILE);
+  const id = Math.max(0, ...tasks.map(({ ID }) => ID)) + 1;
 
-//   tasks.push(Task);
-    tasks.push({"task": task, "done": false});
+  //   tasks.push(Task);
+  tasks.push({ ID: id, task: task, done: false });
 
   await saveTask(DEFAULT_FILE, tasks);
 }
 
-export async function readList(isAll=false){
-  if(isAll){
+export async function readList(isAll = false) {
+  if (isAll) {
     const tasks = await readTask(DEFAULT_FILE);
-    return tasks
-  }else{
+    return tasks;
+  } else {
     const tasks = await readTask(DEFAULT_FILE);
-    return tasks.filter(task => task.done !== true)
+    return tasks.filter((task) => task.done !== true);
   }
 }
 
-export async function doneChangeValue(id, value){
-  const tasks = await readTask(DEFAULT_FILE);
+export async function doneChangeValue(id, value) {
+  try {
+    const tasks = await readTask(DEFAULT_FILE);
 
-  if(tasks[id-1]){
-    tasks[id-1].done = true
-    await saveTask(DEFAULT_FILE, tasks)
-    return true
-  }else{
-    return false
+    const idexist = tasks.find((task) => task.ID === id);
+
+    if (idexist !== undefined) {
+      idexist.done = value;
+      await saveTask(DEFAULT_FILE, tasks);
+      return true;
+    }
+    return false;
+  } catch (err) {
+    console.log(err);
   }
+}
 
-
-  
+export async function reset() {
+  try {
+    await saveTask(DEFAULT_FILE, []);
+    return true;
+  } catch (err) {
+    return false;
+  }
 }

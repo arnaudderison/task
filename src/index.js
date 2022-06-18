@@ -1,8 +1,8 @@
 #! /usr/bin/env node
 import { program, InvalidArgumentError } from "commander";
-import { createTask, readList, doneChangeValue } from "./command.js";
-import { table } from 'table';
-import chalk from 'chalk';
+import { createTask, readList, doneChangeValue, reset } from "./command.js";
+import { table } from "table";
+import chalk from "chalk";
 
 program
   .command("add")
@@ -20,12 +20,16 @@ program
     try {
       const tasks = await readList(option.All);
 
-      let counter = 0;
-      const tabTasks = [[chalk.bold("N°"), chalk.bold("Task")]];
+      if (tasks.length === 0) {
+        return console.log(chalk.blue("Vous n'avez aucune tache"))
+      }
+      const tabTasks = [[chalk.bold("ID"), chalk.bold("Task")]];
 
       tasks.map((el) => {
-        counter++;
-        tabTasks.push([chalk.green(`${counter}`), chalk.blue(chalk.bold(el.task))]);
+        tabTasks.push([
+          chalk.green(el.ID),
+          el.done ? chalk.green(chalk.dim(el.task)) : chalk.red(el.task),
+        ]);
       });
 
       console.log(table(tabTasks));
@@ -36,27 +40,56 @@ program
 
 program
   .command("done")
-  .argument('<num>', "The task num", isNumber)
+  .argument("<num>", "The task num", isNumber)
   .description("done tasks")
-  .action(async (num)=>{
-    try{
-      const done = await doneChangeValue(num, true)
-      if(!done){
-        console.log(chalk.red("Invalid [Num]"))
+  .action(async (num) => {
+    try {
+      const done = await doneChangeValue(num, true);
+      if (!done) {
+        console.log(chalk.red("Invalid [Num]"));
       }
-    }catch(err){
-      console.log(err)
+    } catch (err) {
+      console.log(err);
     }
-  })
+  });
+
+program
+  .command("undone")
+  .argument("<num>", "The task num", isNumber)
+  .description("undone tasks")
+  .action(async (num) => {
+    try {
+      const done = await doneChangeValue(num, false);
+      if (!done) {
+        console.log(chalk.red("Invalid [Num]"));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  });
+
+program
+  .command("reset")
+  .description("reset")
+  .action(async () => {
+    try {
+      const done = await reset();
+      if(!done){
+        console.log(chalk.red("Une erreur est survenue..."))
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  });
 
 program.parse();
 
-function isNumber(number){
-  const num = parseInt(number, 10)
-  if(isNaN(num)){
-    throw new InvalidArgumentError(chalk.red("Task must not empty."))
+function isNumber(number) {
+  const num = parseInt(number, 10);
+  if (isNaN(num)) {
+    throw new InvalidArgumentError(chalk.red("Task must not empty."));
   }
-  return num
+  return num;
 }
 function taskNotEmpty(task) {
   if (task === "") {
