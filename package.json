@@ -1,6 +1,6 @@
 {
   "name": "@arnaud.derison/task",
-  "version": "0.0.2",
+  "version": "2.0.0",
   "description": "",
   "bin": {
     "task": "./src/index.js"

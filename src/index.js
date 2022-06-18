@@ -1,6 +1,12 @@
 #! /usr/bin/env node
 import { program, InvalidArgumentError } from "commander";
-import { createTask, readList, doneChangeValue, reset } from "./command.js";
+import {
+  createTask,
+  readList,
+  doneChangeValue,
+  reset,
+  idSwap,
+} from "./command.js";
 import { table } from "table";
 import chalk from "chalk";
 
@@ -21,9 +27,11 @@ program
       const tasks = await readList(option.All);
 
       if (tasks.length === 0) {
-        return console.log(chalk.blue("Vous n'avez aucune tache"))
+        return console.log(chalk.blue("Vous n'avez aucune tache"));
       }
       const tabTasks = [[chalk.bold("ID"), chalk.bold("Task")]];
+
+      objectTri(tasks);
 
       tasks.map((el) => {
         tabTasks.push([
@@ -74,14 +82,30 @@ program
   .action(async () => {
     try {
       const done = await reset();
-      if(!done){
-        console.log(chalk.red("Une erreur est survenue..."))
+      if (!done) {
+        console.log(chalk.red("Une erreur est survenue..."));
       }
     } catch (err) {
       console.log(err);
     }
   });
+program
+  .command("swap")
+  .description("swap tasks")
+  .argument("<id1>", "The first ID to swap", isNumber)
+  .argument("<id2>", "The second ID to swap", isNumber)
+  .action(async (id1, id2) => {
+    if (id1 === id2) return;
+    try {
+      const swapped = await idSwap(id1, id2);
 
+      if (!swapped) {
+        console.log(chalk.red("Erreur"));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  });
 program.parse();
 
 function isNumber(number) {
@@ -96,4 +120,20 @@ function taskNotEmpty(task) {
     throw new InvalidArgumentError(chalk.red("Task must not empty."));
   }
   return task;
+}
+
+function objectTri(tab) {
+  let change;
+  do {
+    change = false;
+    for (let i = 0; i < tab.length - 1; i++) {
+      if (tab[i].ID > tab[i + 1].ID) {
+        console.log(i, tab[i].ID);
+        const tmp = tab[i];
+        tab[i] = tab[i + 1];
+        tab[i + 1] = tmp;
+        change = true;
+      }
+    }
+  } while (change);
 }

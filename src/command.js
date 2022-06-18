@@ -49,3 +49,19 @@ export async function reset() {
     return false;
   }
 }
+
+export async function idSwap(id1, id2){
+  const tasks = await readTask(DEFAULT_FILE);
+
+  const task1 = tasks.find((task)=> task.ID === id1)
+
+  if(task1 === undefined) return false
+
+  const task2 = tasks.find((task)=> task.ID === id2)
+  if(task2 === undefined) return false
+
+  task1.ID = id2
+  task2.ID = id1
+  await saveTask(DEFAULT_FILE, tasks)
+  return true
+}
