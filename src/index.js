@@ -1,3 +1,4 @@
+#! /usr/bin/env node
 import { program, InvalidArgumentError } from "commander";
 import { createTask } from "./command.js";
 
