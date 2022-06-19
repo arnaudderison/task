@@ -8,7 +8,6 @@ export async function createTask(task) {
   const tasks = await readTask(DEFAULT_FILE);
   const id = Math.max(0, ...tasks.map(({ ID }) => ID)) + 1;
 
-  //   tasks.push(Task);
   tasks.push({ ID: id, task: task, done: false });
 
   await saveTask(DEFAULT_FILE, tasks);
@@ -50,31 +49,31 @@ export async function reset() {
   }
 }
 
-export async function idSwap(id1, id2){
+export async function idSwap(id1, id2) {
   const tasks = await readTask(DEFAULT_FILE);
 
-  const task1 = tasks.find((task)=> task.ID === id1)
+  const task1 = tasks.find((task) => task.ID === id1);
 
-  if(task1 === undefined) return false
+  if (task1 === undefined) return false;
 
-  const task2 = tasks.find((task)=> task.ID === id2)
-  if(task2 === undefined) return false
+  const task2 = tasks.find((task) => task.ID === id2);
+  if (task2 === undefined) return false;
 
-  task1.ID = id2
-  task2.ID = id1
-  await saveTask(DEFAULT_FILE, tasks)
-  return true
+  task1.ID = id2;
+  task2.ID = id1;
+  await saveTask(DEFAULT_FILE, tasks);
+  return true;
 }
 
-export async function deleteTask(id){
-  try{
+export async function deleteTask(id) {
+  try {
     const tasks = await readList(DEFAULT_FILE);
 
-    const newTasks = tasks.filter((task) => task.ID !== id)
+    const newTasks = tasks.filter((task) => task.ID !== id);
 
-    await saveTask(DEFAULT_FILE, newTasks)
-    return true
-  }catch(err){
-    return false
+    await saveTask(DEFAULT_FILE, newTasks);
+    return true;
+  } catch (err) {
+    return false;
   }
 }

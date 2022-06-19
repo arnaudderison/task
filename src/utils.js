@@ -44,9 +44,20 @@ function valideData(key, value){
         case "task":
             if (!isNaN(value)) {
                 throw new Error('pas de string')
-            }
-            
+            } 
             return value;
+        
+        case "ID": 
+        if (isNaN(value)) { 
+          throw new Error("Invalid id in JSON");
+        }
+        return value
+    
+        case "done":
+          if(!(value === false || value === true)){
+            throw new Error("Invalid done JSON")
+          }
+          return value
             
         default:
             return value
