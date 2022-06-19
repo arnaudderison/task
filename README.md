@@ -1,2 +1,2 @@
 # Task management in terminals
-![alt text](http://url/to/img.png)
+![alt text](https://gcdnb.pbrd.co/images/OcThJXjuZZ10.png?o=1)
