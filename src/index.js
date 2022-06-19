@@ -6,6 +6,7 @@ import {
   doneChangeValue,
   reset,
   idSwap,
+  deleteTask,
 } from "./command.js";
 import { table } from "table";
 import chalk from "chalk";
@@ -106,6 +107,23 @@ program
       console.log(err);
     }
   });
+
+program
+  .command("delete")
+  .description("delete tasks")
+  .argument("<id>", "The first ID to swap", isNumber)
+  .action(async (id1) => {
+    try {
+      const idDelete = await deleteTask(id1);
+
+      if (!idDelete) {
+        console.log(chalk.red("Erreur"));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  });
+
 program.parse();
 
 function isNumber(number) {

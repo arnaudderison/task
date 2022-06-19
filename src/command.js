@@ -65,3 +65,16 @@ export async function idSwap(id1, id2){
   await saveTask(DEFAULT_FILE, tasks)
   return true
 }
+
+export async function deleteTask(id){
+  try{
+    const tasks = await readList(DEFAULT_FILE);
+
+    const newTasks = tasks.filter((task) => task.ID !== id)
+
+    await saveTask(DEFAULT_FILE, newTasks)
+    return true
+  }catch(err){
+    return false
+  }
+}
